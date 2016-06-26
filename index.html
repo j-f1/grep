@@ -198,7 +198,7 @@ function shouldReload() {
 var findWords = function(regex, full, callback) {
   if (!findWords.words) {
     if (localStorage.words && !shouldReload()) {
-      findWords.words = JSON.parse(localStorage.words)
+      findWords.words = JSON.parse(localStorage.words);
     } else {
       $.get('data.json', function(words) {
         findWords.words = words;
@@ -226,15 +226,15 @@ var regex = new RegExp(match[1], match[2]); */
     regex = new RegExp(regex);
     callback(findWords.words.filter(regex.test, regex), regex);
   }
-}
+};
 var updateHash = function() {
   window.location.hash = '#' + ($checkbox.checked ? '1' : '0') + '?' + $in.text();
-}
+};
 $(function() {
   window.$in = $('span');
   window.$checkbox = $('input')[0];
   $(window).on('hashchange', function() {
-    var hashData = window.location.hash.slice(1).split('?');
+    var hashData = window.location.hash.slice(1).split('?'),
         flags = hashData.shift(),
         regex = hashData.join('?');
     if ($in.text() !== regex) {
@@ -247,7 +247,7 @@ $(function() {
     updateHash();
     findWords($in.text(), $('[type="checkbox"]').is(':checked'), function(matches) {
       var $ul = $('ul').empty();
-      $ul.parents('div').attr('data-before', $in.text().length ? (matches.length + " match" + (matches.length == 1 ? "" : "es")) : "")
+      $ul.parents('div').attr('data-before', $in.text().length ? (matches.length + " match" + (matches.length == 1 ? "" : "es")) : "");
       $.each(matches, function() {
         $ul.append($('<li>').text(this));
       });
