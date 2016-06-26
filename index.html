@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>$ grep -&thinsp;-&thinsp;cheat ~/hangman</title>
+  <script type="text/javascript" src="//code.jquery.com/jquery-2.2.2.js"></script>
+<style type="text/css">
+body {
+  background: #333;
+  height: 100vh;
+  margin: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2.85vmax;
+  font-family: monospace;
+}
+form {
+  margin: 1em;
+  color: #666;
+}
+span {
+  max-width: 85%;
+  min-width: 7em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  word-break: break-word;
+  white-space: normal;
+  padding: 0 15px;
+  display: inline-block;
+  border-bottom: 1px solid #aaa;
+  color: #ddd;
+  word-break: break-all;
+  -webkit-transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s;
+  margin-bottom: 1px;
+}
+span::selection {
+  background: #aaa;
+  color: #fff;
+}
+span:after {
+  content: "regex";
+  color: #666;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+span:empty:not(:focus):after {
+  opacity: 1;
+  display: initial;
+}
+span:focus {
+  border-bottom: 2px solid #fff;
+  outline: none;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+i {
+  font-style: inherit;
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+  /* temp: */
+  display: none;
+}
+i.focus {
+  color: #fff;
+}
+
+form b {
+  color: #999;
+  font-weight: inherit;
+  display: inline-block;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #eee;
+  text-decoration: none;
+  margin-left: 0.5em;
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+}
+button:active {
+  color: #aaa;
+}
+button:focus {
+  outline: none;
+}
+
+ul {
+  list-style-type: none;
+  color: white;
+  max-height: 68vh;
+  overflow: auto;
+}
+div {
+  position: relative;
+}
+div::before {
+  content: attr(data-before);
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  color: white;
+}
+
+input[type=checkbox] {
+  display: none;
+}
+label {
+  position: relative;
+}
+label::before {
+  content: "";
+  display: inline-block;
+
+  cursor:pointer;
+
+  width:  0.5em;
+  height: 0.5em;
+
+  border: 0.1em solid #CCC;
+  border-radius: 0.1em;
+}
+label:active::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+label::after {
+  content: "";
+  border: 0.1em solid;
+  border-top: none;
+  border-right: none;
+  position: absolute;
+  left: 0.18em;
+  top: 0.39em;
+  width: 0;
+  height: 0.25em;
+  transform: rotate(-45deg);
+  border-color: transparent;
+  transition: all 0.25s;
+}
+:checked+label::after {
+  top: 0.15em;
+  left: 0.1em;
+  width: 0.6em;
+  border-color: currentColor;
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #999;
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #666;
+}
+</style>
+<script type='text/javascript'>//<![CDATA[
+window.RELOAD_WORDS = 0;
+
+function shouldReload() {
+  return !(!window.RELOAD_WORDS || (window.RELOAD_WORDS === localStorage.reloadToken));
+}
+
+var findWords = function(regex, full, callback) {
+  if (!findWords.words) {
+    if (localStorage.words && !shouldReload()) {
+      findWords.words = JSON.parse(localStorage.words)
+    } else {
+      $.get('data.json', function(words) {
+        findWords.words = words;
+        localStorage.words = JSON.stringify(words);
+        findWords(regex, full, callback);
+      }.bind(this), 'json').fail(function() {
+        if (localStorage.words) {
+          findWords.words = localStorage.words;
+          findWords(regex, full, callback);
+        }
+      });
+      return;
+    }
+  } else {
+/* To require slashes around the regex, but allow flags: (SOURCE: http://stackoverflow.com/a/874742/5244995)
+var match = regex.match(new RegExp('^/(.*?)/([gimy]*)$'));
+var regex = new RegExp(match[1], match[2]); */
+    if (!regex) {
+      callback([], regex);
+      return false;
+    }
+    if (full) {
+      regex = "^"+regex+"$";
+    }
+    regex = new RegExp(regex);
+    callback(findWords.words.filter(regex.test, regex), regex);
+  }
+}
+var updateHash = function() {
+  window.location.hash = '#' + ($checkbox.checked ? '1' : '0') + '?' + $in.text();
+}
+$(function() {
+  window.$in = $('span');
+  window.$checkbox = $('input')[0];
+  $(window).on('hashchange', function() {
+    var hashData = window.location.hash.slice(1).split('?');
+        flags = hashData.shift(),
+        regex = hashData.join('?');
+    if ($in.text() !== regex) {
+      $in.text(regex);
+    }
+    $checkbox.checked = +flags[0];
+  });
+  $(window).trigger('hashchange');
+  $('button').click(function() {
+    updateHash();
+    findWords($in.text(), $('[type="checkbox"]').is(':checked'), function(matches) {
+      var $ul = $('ul').empty();
+      $ul.parents('div').attr('data-before', $in.text().length ? (matches.length + " match" + (matches.length == 1 ? "" : "es")) : "")
+      $.each(matches, function() {
+        $ul.append($('<li>').text(this));
+      });
+    });
+//    event.preventDefault();
+    return false;
+  });
+  $in
+  .on('keydown', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  })
+  .on('keyup', function(event) {
+    if (event.keyCode == 13) {
+//      $('#regex').val($('span').text());
+
+      $('button').click();
+      return false;
+    }
+  })
+  .on('focus', function() {
+    $('i').addClass('focus');
+  })
+  .on('blur', function() {
+    $('i').removeClass('focus');
+  });
+  $('input').change(function() {$('button').click();});
+});
+//]]>
+</script>
+</head>
+<body>
+<main>
+  <form>
+  $ grep <wbr>
+  <i>^</i><span contenteditable></span><i>$</i><wbr>
+    <b>/usr/dict/words
+      <button>&crarr;</button>
+    </b>
+    <br><input type="checkbox" id="a" checked><label for="a"> full word only</label>
+<!--    <input id="regex" type="hidden" name="regex">-->
+  </form>
+  <div><ul></ul></div>
+</main>
+</body>
+</html>
