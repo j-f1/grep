@@ -6,22 +6,14 @@
   <meta name="googlebot" content="noindex, nofollow">
   <title>$ grep -&thinsp;-&thinsp;cheat ~/hangman</title>
   <script type="text/javascript" src="//code.jquery.com/jquery-2.2.2.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" charset="utf-8"></script>
 <style type="text/css">
 body {
   background: #333;
   height: 100vh;
   margin: 0;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
   align-items: center;
   text-align: center;
   font-size: 2.85vmax;
@@ -34,8 +26,6 @@ form {
 span {
   max-width: 85%;
   min-width: 7em;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   word-break: break-word;
   white-space: normal;
@@ -44,7 +34,6 @@ span {
   border-bottom: 1px solid #aaa;
   color: #ddd;
   word-break: break-all;
-  -webkit-transition: border-color 0.2s, color 0.2s;
   transition: border-color 0.2s, color 0.2s;
   margin-bottom: 1px;
 }
@@ -58,7 +47,6 @@ span:after {
   pointer-events: none;
   opacity: 0;
   display: none;
-  -webkit-transition: opacity 0.2s;
   transition: opacity 0.2s;
 }
 span:empty:not(:focus):after {
@@ -74,7 +62,6 @@ span:focus {
 
 i {
   font-style: inherit;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
   /* temp: */
   display: none;
@@ -90,7 +77,6 @@ form b {
 }
 
 button {
-  -webkit-appearance: none;
   appearance: none;
   padding: 0;
   font: inherit;
@@ -100,7 +86,6 @@ button {
   color: #eee;
   text-decoration: none;
   margin-left: 0.5em;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 button:active {
