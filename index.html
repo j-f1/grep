@@ -34,7 +34,13 @@ form {
   margin: 1em;
   color: #666;
 }
-span {
+.input {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: center;
+
   max-width: 85%;
   min-width: 7em;
   box-sizing: border-box;
@@ -50,23 +56,11 @@ span {
   user-select: initial;
   cursor: text;
 }
-span::selection {
+.input::selection {
   background: #aaa;
   color: #fff;
 }
-span:after {
-  content: "regex";
-  color: #666;
-  pointer-events: none;
-  opacity: 0;
-  display: none;
-  transition: opacity 0.2s;
-}
-span:empty:not(:focus):after {
-  opacity: 1;
-  display: initial;
-}
-span:focus {
+.input:focus {
   border-bottom: 2px solid #fff;
   outline: none;
   color: #fff;
@@ -286,26 +280,26 @@ var regex = new RegExp(match[1], match[2]); */
   }
 };
 var updateHash = function() {
-  window.location.hash = '#' + ($checkbox.checked ? '1' : '0') + '?' + $in.text();
+  window.location.hash = '#' + ($checkbox.checked ? '1' : '0') + '?' + $in.val();
 };
 $(function() {
-  window.$in = $('span');
-  window.$checkbox = $('input')[0];
+  window.$in = $('.input');
+  window.$checkbox = $('input[type]')[0];
   $(window).on('hashchange', function() {
     var hashData = window.location.hash.slice(1).split('?'),
         flags = hashData.shift(),
         regex = hashData.join('?');
-    if ($in.text() !== regex) {
-      $in.text(regex);
+    if ($in.val() !== regex) {
+      $in.val(regex);
     }
     $checkbox.checked = +flags[0];
   });
   $(window).trigger('hashchange');
   $('button').click(function() {
     updateHash();
-    findWords($in.text(), $('[type="checkbox"]').is(':checked'), function(matches) {
+    findWords($in.val(), $('[type="checkbox"]').is(':checked'), function(matches) {
       var $ul = $('ul').empty();
-      $ul.parents('div').attr('data-before', $in.text().length ? (matches.length + " match" + (matches.length == 1 ? "" : "es")) : "");
+      $ul.parents('div').attr('data-before', $in.val().length ? (matches.length + " match" + (matches.length == 1 ? "" : "es")) : "");
       $.each(matches, function() {
         $ul.append($('<li>').text(this));
       });
@@ -313,28 +307,24 @@ $(function() {
 //    event.preventDefault();
     return false;
   });
-  $in
-  .on('keydown', function(event) {
+  $in.on('keydown', function(event) {
     if (event.keyCode == 13) {
       event.preventDefault();
       return false;
     }
-  })
-  .on('keyup', function(event) {
+  }).on('keyup', function(event) {
     if (event.keyCode == 13) {
 //      $('#regex').val($('span').text());
 
       $('button').click();
       return false;
     }
-  })
-  .on('focus', function() {
+  }).on('focus', function() {
     $('i').addClass('focus');
-  })
-  .on('blur', function() {
+  }).on('blur', function() {
     $('i').removeClass('focus');
   });
-  $('input').change(function() {$('button').click();});
+  $('input[type]').change(function() {$('button').click();});
 });
 //]]>
 </script>
@@ -343,12 +333,11 @@ $(function() {
 <main>
   <form>
   $ grep <wbr>
-  <i>^</i><span contenteditable></span><i>$</i><wbr>
+  <i>^</i><input class="input" placeholder="regex"><i>$</i><wbr>
     <b>/usr/dict/words
       <button>&crarr;</button>
     </b>
     <br><input type="checkbox" id="a" checked><label for="a"> full word only</label>
-<!--    <input id="regex" type="hidden" name="regex">-->
   </form>
   <div><ul></ul></div>
 </main>
