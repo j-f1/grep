@@ -7,6 +7,15 @@
   <title>$ grep -&thinsp;-&thinsp;cheat ~/hangman</title>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js" charset="utf-8"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" charset="utf-8"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.0.0/jszip.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="//cdn.rawgit.com/Stuk/jszip-utils/dfdd631c4249bc495d0c335727ee547702812aa5/dist/jszip-utils.min.js"></script>
+  <!--
+  Mandatory in IE 6, 7, 8 and 9.
+  -->
+  <!--[if IE]>
+    <script type="text/javascript" src="//cdn.rawgit.com/Stuk/jszip-utils/dfdd631c4249bc495d0c335727ee547702812aa5/dist/jszip-utils-ie.min.js"></script>
+  <![endif]-->
+  <script src="//cdn.rawgit.com/paroga/cbor-js/dca0855fd71ee9e480881e6e1bccce6591ffa67b/cbor.js" charset="utf-8"></script>
 <style type="text/css">
 body {
   background: #333;
@@ -180,20 +189,65 @@ function shouldReload() {
   return !(!window.RELOAD_WORDS_TOKEN || (window.RELOAD_WORDS_TOKEN === localStorage.reloadToken));
 }
 
+function _base64ToArrayBuffer(base64) {
+  // from http://stackoverflow.com/a/21797381/5244995
+  var binary_string =  window.atob(base64);
+  var len = binary_string.length;
+  var bytes = new Uint8Array( len );
+  for (var i = 0; i < len; i++)        {
+    bytes[i] = binary_string.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+
+function uintToString(uintArray) {
+  // from http://stackoverflow.com/a/17192845/5244995
+  var encodedString = String.fromCharCode.apply(null, uintArray),
+      decodedString = decodeURIComponent(escape(encodedString));
+  return decodedString;
+}
+
+
 var findWords = function(regex, full, callback) {
   if (!findWords.words) {
     if (localStorage.words && !shouldReload()) {
-      findWords.words = JSON.parse(localStorage.words);
+      var words = CBOR.decode(_base64ToArrayBuffer(localStorage.words));
+      for (var i = 0; i < words.length; i++) {
+        words[i] = uintToString(words[i]);
+      }
+      findWords.words = words;
     } else {
-      $.get('data.json', function(words) {
-        findWords.words = words;
-        localStorage.words = JSON.stringify(words);
-        findWords(regex, full, callback);
-      }.bind(this), 'json').fail(function() {
-        if (localStorage.words) {
-          findWords.words = localStorage.words;
-          findWords(regex, full, callback);
+      JSZipUtils.getBinaryContent('words.cbor.zip', function(err, data) {
+        if(err) {
+          if (localStorage.words) {
+            findWords.words = CBOR.decode(_base64ToArrayBuffer(localStorage.words));
+            findWords(regex, full, callback);
+            return;
+          } else {
+            throw err;
+          }
         }
+        var zip = new JSZip();
+        zip.loadAsync(data).then(function() {
+          var file = zip.file('words.cbor');
+          file.async("arraybuffer").then(function(cborData) {
+            try {
+              var words = CBOR.decode(cborData);
+              for (var i = 0; i < words.length; i++) {
+                words[i] = uintToString(words[i]);
+              }
+              findWords.words = words;
+              // from http://stackoverflow.com/q/9267899/5244995#comment55137593_11562550
+              localStorage.words = btoa([].reduce.call(new Uint8Array(CBOR.encode(words)),function(p,c){return p+String.fromCharCode(c);},''));
+              findWords(regex, full, callback);
+            } catch (e) {
+              console.error(e);
+            }
+          }, function(err) {
+            console.error(err);
+          });
+        });
       });
       return;
     }
