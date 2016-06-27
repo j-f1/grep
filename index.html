@@ -57,9 +57,9 @@ form {
   user-select: initial;
   cursor: text;
 }
-.input::selection {
+::selection {
   background: #aaa;
-  color: #fff;
+  color: inherit;
 }
 .input:focus {
   border-bottom: 2px solid #fff;
@@ -108,6 +108,8 @@ ul {
   color: white;
   max-height: 68vh;
   overflow: auto;
+  user-select: initial;
+  cursor: text;
 }
 div {
   position: relative;
