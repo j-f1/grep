@@ -223,10 +223,11 @@ function uintToString(uintArray) {
 
 
 var findWords = function(regex, full, callback) {
+  var i;
   if (!findWords.words) {
     if (localStorage.words && !shouldReload()) {
       var words = CBOR.decode(_base64ToArrayBuffer(localStorage.words));
-      for (var i = 0; i < words.length; i++) {
+      for (i = 0; i < words.length; i++) {
         words[i] = uintToString(words[i]);
       }
       findWords.words = words;
@@ -276,17 +277,29 @@ var regex = new RegExp(match[1], match[2]); */
       regex = "^"+regex+"$";
     }
     regex = new RegExp(regex);
-    callback(findWords.words.filter(regex.test, regex), regex);
+    var matches = [],
+        tooMany = false;
+    for (i = 0; i < findWords.words.length; i++) {
+      var word = findWords.words[i];
+      if (regex.test(word)) {
+        matches.push(word);
+      }
+      if (matches.length >= 8000) {
+        tooMany = true;
+        break;
+      }
+    }
+    callback(matches, regex, tooMany);
   }
 };
 var updateHash = function() {
-  window.location.hash = '#' + ($checkbox.checked ? '1' : '0') + '?' + $in.val();
+  window.location.hash = '#' + btoa(($checkbox.checked ? '1' : '0') + '?' + $in.val());
 };
 $(function() {
   window.$in = $('.input');
   window.$checkbox = $('input[type]')[0];
   $(window).on('hashchange', function() {
-    var hashData = window.location.hash.slice(1).split('?'),
+    var hashData = atob(window.location.hash.slice(1)).split('?'),
         flags = hashData.shift(),
         regex = hashData.join('?');
     if ($in.val() !== regex) {
@@ -297,9 +310,12 @@ $(function() {
   $(window).trigger('hashchange');
   $('button').click(function() {
     updateHash();
-    findWords($in.val(), $('[type="checkbox"]').is(':checked'), function(matches) {
+    findWords($in.val(), $('[type="checkbox"]').is(':checked'), function(matches, _, tooMany) {
+      if (tooMany) {
+        matches.push('Whoa! There’s a lot of matches! You might want to try something a bit more specific. (We limit the matches to avoid freezing your computer.)');
+      }
       var $ul = $('ul').empty();
-      $ul.parents('div').attr('data-before', $in.val().length ? (matches.length + " match" + (matches.length == 1 ? "" : "es")) : "");
+      $ul.parents('div').attr('data-before', $in.val().length ? ((matches.length - !!tooMany) + " match" + (matches.length == 1 ? "" : "es")) : "");
       $.each(matches, function() {
         $ul.append($('<li>').text(this));
       });
