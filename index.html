@@ -27,6 +27,7 @@ body {
   text-align: center;
   font-size: 2.85vmax;
   font-family: monospace;
+  user-select: none;
 }
 form {
   margin: 1em;
@@ -45,6 +46,7 @@ span {
   word-break: break-all;
   transition: border-color 0.2s, color 0.2s;
   margin-bottom: 1px;
+  user-select: initial;
 }
 span::selection {
   background: #aaa;
@@ -181,12 +183,29 @@ label::after {
 ::-webkit-scrollbar-thumb:active {
     background: #666;
 }
+
+footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  color: #666;
+  font-size: 1rem;
+  cursor: default;
+}
+
+footer a {
+  color: #AAA;
+}
+
 </style>
 <script type='text/javascript'>//<![CDATA[
-window.RELOAD_WORDS_TOKEN = 0;
+window.RELOAD_WORDS_TOKEN = 1;
 
 function shouldReload() {
-  return !(!window.RELOAD_WORDS_TOKEN || (window.RELOAD_WORDS_TOKEN === localStorage.reloadToken));
+  var res = window.RELOAD_WORDS_TOKEN !== localStorage.reloadToken;
+  localStorage.reloadToken = window.RELOAD_WORDS_TOKEN;
+  return res;
 }
 
 function _base64ToArrayBuffer(base64) {
@@ -333,5 +352,6 @@ $(function() {
   </form>
   <div><ul></ul></div>
 </main>
+<footer>Word list from <a href="http://wordlist.aspell.net">SCOWL</a> (size 60, both accents &amp; no accents, US spelling, common variants, hacker list).<br>Converted to CBOR with Python&rsquo;s magic.<br> Some code from <a href="http://stackoverflow.com/">Stack Overflow</a>, view page source for attributions.</footer>
 </body>
 </html>
