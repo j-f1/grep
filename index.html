@@ -16,6 +16,7 @@
     <script type="text/javascript" src="//cdn.rawgit.com/Stuk/jszip-utils/dfdd631c4249bc495d0c335727ee547702812aa5/dist/jszip-utils-ie.min.js"></script>
   <![endif]-->
   <script src="//cdn.rawgit.com/paroga/cbor-js/dca0855fd71ee9e480881e6e1bccce6591ffa67b/cbor.js" charset="utf-8"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/native-promise-only/0.8.1/npo.js" charset="utf-8"></script>
   <script src="api.js" charset="utf-8"></script>
 <style type="text/css">
 body {
@@ -215,7 +216,7 @@ $(function() {
   $(window).trigger('hashchange');
   $('button').click(function() {
     updateHash();
-    findWords($('[type="checkbox"]').is(':checked') ? '^' + $in.val() + '$' : $in.val() , function(matches, _, tooMany) {
+    findWords($('[type="checkbox"]').is(':checked') ? '^' + $in.val() + '$' : $in.val()).then(function(matches, _, tooMany) {
       if (tooMany) {
         matches.push('Whoa! There’s a lot of matches! You might want to try something a bit more specific. (We limit the matches to avoid freezing your computer.)');
       }
@@ -224,7 +225,7 @@ $(function() {
       $.each(matches, function() {
         $ul.append($('<li>').text(this));
       });
-    });
+    }, function(err) {throw err;});
 //    event.preventDefault();
     return false;
   });
