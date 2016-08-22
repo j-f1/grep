@@ -197,33 +197,6 @@ footer a {
 
 </style>
 <script type='text/javascript'>//<![CDATA[
-window.RELOAD_WORDS_TOKEN = 1;
-
-function shouldReload() {
-  var res = window.RELOAD_WORDS_TOKEN !== localStorage.reloadToken;
-  localStorage.reloadToken = window.RELOAD_WORDS_TOKEN;
-  return res;
-}
-
-function _base64ToArrayBuffer(base64) {
-  // from http://stackoverflow.com/a/21797381/5244995
-  var binary_string =  window.atob(base64);
-  var len = binary_string.length;
-  var bytes = new Uint8Array( len );
-  for (var i = 0; i < len; i++)        {
-    bytes[i] = binary_string.charCodeAt(i);
-  }
-  return bytes.buffer;
-}
-
-
-function uintToString(uintArray) {
-  // from http://stackoverflow.com/a/17192845/5244995
-  var encodedString = String.fromCharCode.apply(null, uintArray),
-      decodedString = decodeURIComponent(escape(encodedString));
-  return decodedString;
-}
-
 var updateHash = function() {
   window.location.hash = '#' + btoa(($checkbox.checked ? '1' : '0') + '?' + $in.val());
 };
@@ -242,7 +215,7 @@ $(function() {
   $(window).trigger('hashchange');
   $('button').click(function() {
     updateHash();
-    findWords($in.val(), $('[type="checkbox"]').is(':checked'), function(matches, _, tooMany) {
+    findWords($('[type="checkbox"]').is(':checked') ? '^' + $in.val() + '$' : $in.val() , function(matches, _, tooMany) {
       if (tooMany) {
         matches.push('Whoa! There’s a lot of matches! You might want to try something a bit more specific. (We limit the matches to avoid freezing your computer.)');
       }
