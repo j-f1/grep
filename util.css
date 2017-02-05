@@ -1,0 +1,186 @@
+/* Fira Code */
+@import "//cdn.rawgit.com/tonsky/FiraCode/94f1d8f/distr/fira_code.css";
+
+/* sections */
+body {
+  background-color: #333;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2.85vmax;
+  font-family: 'Fira Code', monospace;
+}
+
+form {
+  margin: 1em;
+  color: #666;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  color: #666;
+  font-size: 1rem;
+}
+
+footer a {
+  color: #AAA;
+}
+
+
+
+/* selection */
+::selection {
+  background: #aaa;
+  color: inherit;
+}
+
+/* *B*right */
+b {
+  color: #999;
+  font-weight: inherit;
+  display: inline-block;
+}
+
+/* underline input */
+.input {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: center;
+
+  min-width: 7em;
+  box-sizing: border-box;
+  white-space: normal;
+  padding: 0 15px;
+  display: inline-block;
+  border-bottom: 1px solid #aaa;
+  color: #ddd;
+  word-break: break-all;
+  transition: border-color 0.2s, color 0.2s;
+  margin-bottom: 1px;
+}
+.input:focus {
+  border-bottom: 2px solid #fff;
+  outline: none;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+/* button, from sizr */
+.btn {
+  cursor: pointer;
+  margin-top: 1em;
+  font-family: monospace;
+  padding: .3em 1em;
+  padding-top: .5em;
+  background: #eee;
+  border-radius: 5px;
+  border: none;
+  appearance: none;
+  user-select: none;
+  font-size: inherit;
+}
+
+.btn:focus {
+  outline: none;
+  padding: calc(.3em - 1px) calc(1em - 1px);
+  padding-top: calc(.5em - 1px);
+  border: 1px solid white;
+}
+
+.btn:hover {
+  background: #ccc;
+}
+
+.btn:active {
+  top: 1px;
+  position: relative;
+  background: #aaa;
+}
+
+/* lite (iOS 7) button (↵ from grep) */
+.lite-btn {
+  appearance: none;
+  padding: 0;
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #eee;
+  text-decoration: none;
+  margin-left: 0.5em;
+  transition: color 0.2s;
+}
+.lite-btn:active {
+  color: #aaa;
+}
+.lite-btn:focus {
+  outline: none;
+}
+
+/* checkbox (from grep) */
+input.fancy-check[type=checkbox] {
+  display: none;
+}
+label.fancy-check {
+  position: relative;
+  cursor: pointer;
+}
+label.fancy-check::before {
+  content: "";
+  display: inline-block;
+
+  width:  0.5em;
+  height: 0.5em;
+
+  border: 0.1em solid #CCC;
+  border-radius: 0.1em;
+}
+label.fancy-check:active::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+label.fancy-check::after {
+  content: "";
+  border: 0.1em solid;
+  border-top: none;
+  border-right: none;
+  position: absolute;
+  left: 0.18em;
+  top: 0.39em;
+  width: 0;
+  height: 0.25em;
+  transform: rotate(-45deg);
+  border-color: transparent;
+  transition: all 0.25s;
+}
+.fancy-check:checked+label.fancy-check::after {
+  top: 0.15em;
+  left: 0.1em;
+  width: 0.6em;
+  border-color: currentColor;
+}
+
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-thumb {
+    background: #999;
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #666;
+}

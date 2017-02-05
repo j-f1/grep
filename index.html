@@ -18,91 +18,17 @@
   <script src="//cdn.rawgit.com/paroga/cbor-js/dca0855fd71ee9e480881e6e1bccce6591ffa67b/cbor.js" charset="utf-8"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/native-promise-only/0.8.1/npo.js" charset="utf-8"></script>
   <script src="api.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="util.css" charset="utf-8">
 <style type="text/css">
 body {
-  background: #333;
-  height: 100vh;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 2.85vmax;
-  font-family: monospace;
   user-select: none;
   cursor: default;
 }
-form {
-  margin: 1em;
-  color: #666;
-}
+
 .input {
-  appearance: none;
-  border: none;
-  background: transparent;
-  font: inherit;
-  text-align: center;
-
   max-width: 85%;
-  min-width: 7em;
-  box-sizing: border-box;
-  word-break: break-word;
-  white-space: normal;
-  padding: 0 15px;
-  display: inline-block;
-  border-bottom: 1px solid #aaa;
-  color: #ddd;
-  word-break: break-all;
-  transition: border-color 0.2s, color 0.2s;
-  margin-bottom: 1px;
-  user-select: initial;
-  cursor: text;
-}
-::selection {
-  background: #aaa;
-  color: inherit;
-}
-.input:focus {
-  border-bottom: 2px solid #fff;
-  outline: none;
-  color: #fff;
-  margin-bottom: 0;
 }
 
-i {
-  font-style: inherit;
-  transition: color 0.2s;
-  /* temp: */
-  display: none;
-}
-i.focus {
-  color: #fff;
-}
-
-form b {
-  color: #999;
-  font-weight: inherit;
-  display: inline-block;
-}
-
-button {
-  appearance: none;
-  padding: 0;
-  font: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #eee;
-  text-decoration: none;
-  margin-left: 0.5em;
-  transition: color 0.2s;
-}
-button:active {
-  color: #aaa;
-}
-button:focus {
-  outline: none;
-}
 
 ul {
   list-style-type: none;
@@ -123,79 +49,6 @@ div::before {
   opacity: 0.5;
   color: white;
 }
-
-input[type=checkbox] {
-  display: none;
-}
-label {
-  position: relative;
-  cursor: pointer;
-}
-label::before {
-  content: "";
-  display: inline-block;
-
-  width:  0.5em;
-  height: 0.5em;
-
-  border: 0.1em solid #CCC;
-  border-radius: 0.1em;
-}
-label:active::before {
-  background: rgba(255, 255, 255, 0.1);
-}
-label::after {
-  content: "";
-  border: 0.1em solid;
-  border-top: none;
-  border-right: none;
-  position: absolute;
-  left: 0.18em;
-  top: 0.39em;
-  width: 0;
-  height: 0.25em;
-  transform: rotate(-45deg);
-  border-color: transparent;
-  transition: all 0.25s;
-}
-:checked+label::after {
-  top: 0.15em;
-  left: 0.1em;
-  width: 0.6em;
-  border-color: currentColor;
-}
-
-::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #999;
-    width: 14px;
-    height: 14px;
-    border-radius: 7px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #bbb;
-}
-::-webkit-scrollbar-thumb:active {
-    background: #666;
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  text-align: right;
-  color: #666;
-  font-size: 1rem;
-}
-
-footer a {
-  color: #AAA;
-}
-
 </style>
 <script type='text/javascript'>//<![CDATA[
 var updateHash = function() {
@@ -255,11 +108,11 @@ $(function() {
 <main>
   <form>
   $ grep <wbr>
-  <i>^</i><input class="input" placeholder="regex"><i>$</i><wbr>
+  <input class="input" placeholder="regex"><wbr>
     <b>/usr/dict/words
-      <button>&crarr;</button>
+      <button class="lite-btn">&crarr;</button>
     </b>
-    <br><input type="checkbox" id="a" checked><label for="a"> full word only</label>
+    <br><input type="checkbox" id="a" class="fancy-check" checked><label class="fancy-check" for="a"> full word only</label>
   </form>
   <div><ul></ul></div>
 </main>
