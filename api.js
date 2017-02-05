@@ -49,7 +49,7 @@
           }
           findWords.words = words;
         } else {
-          JSZipUtils.getBinaryContent('//twopointzero.us/code/grep/words.cbor.zip', function(err, data) {
+          JSZipUtils.getBinaryContent('//j-f1.github.io/grep/words.cbor.zip', function(err, data) {
             if(err) {
               if (localStorage.words) {
                 findWords.words = CBOR.decode(_base64ToArrayBuffer(localStorage.words));
