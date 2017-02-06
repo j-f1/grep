@@ -29,15 +29,6 @@ body {
   max-width: 85%;
 }
 
-
-ul {
-  list-style-type: none;
-  color: white;
-  max-height: 68vh;
-  overflow: auto;
-  user-select: initial;
-  cursor: text;
-}
 div {
   position: relative;
 }
@@ -114,7 +105,7 @@ $(function() {
     </b>
     <br><input type="checkbox" id="a" class="fancy-check" checked><label class="fancy-check" for="a"> full word only</label>
   </form>
-  <div><ul></ul></div>
+  <div><ul class="main"></ul></div>
 </main>
 <footer>
   Word list from <a href="http://wordlist.aspell.net">SCOWL</a> (size 60, both accents &amp; no accents, US spelling, common variants, hacker list).<br>Converted to CBOR with Python&rsquo;s magic.<br> Some code from <a href="http://stackoverflow.com/">Stack Overflow</a>, view page source for attributions.
